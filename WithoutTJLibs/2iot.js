@@ -8,7 +8,7 @@ TJ servo motor and led
 version 20170613 
 Note: Stand alone MQTT control no need for  TJBot Lib for this one
 **********************************************************************/
-var iotf = require("./");
+var iotf = require("./../iot-nodejs/.");
 var config = require("./device.json");
 //var ws281x = require('rpi-ws281x-native');
 var rpiDhtSensor = require('rpi-dht-sensor');
@@ -64,7 +64,7 @@ deviceClient.on('connect', function(){
     console.log("connected");
     setInterval(function function_name () {
 	readout = dht.read();
-	mystr = ',"Temperature":' +readout.temperature.toFixed(2)+', "humidity": ' + readout.humidity.toFixed(2);
+	mystr = ',"temperature":' +readout.temperature.toFixed(2)+', "humidity": ' + readout.humidity.toFixed(2);
     	i++;
     	deviceClient.publish('myevt', 'json', '{"value":'+i+mystr+'}', 2);
     },5000);
