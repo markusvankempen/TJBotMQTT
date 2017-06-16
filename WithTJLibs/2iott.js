@@ -6,9 +6,9 @@ Sends mqtt message to IoT and Waits for commands to controls the
 TJ servo motor and led 
 
 version 20170613 
-Note: Stand alone MQTT control no need for Conversion of TJBot Lib
+Note: needs TJBot Lib
 **********************************************************************/
-var iotf = require("./../iot-nodejs/.");
+var iotf = require("./");
 var config = require("./device.json");
 //var ws281x = require('rpi-ws281x-native');
 var rpiDhtSensor = require('rpi-dht-sensor');
@@ -26,16 +26,16 @@ var NUM_LEDS = 1;        // Number of LEDs
 //ws281x.init(NUM_LEDS);   // initialize LEDs 
 //var color = new Uint32Array(NUM_LEDS); 
 //ws281x.render(color);
-var tj = new TJBot(['led'], {log: {level: 'debug'}}, {});
+var tjled   = new TJBot(['led'], {log: {level: 'debug'}}, {});
+var tjservo = new TJBot(['servo'], {log: {level: 'debug'}}, {});
 
-//tj.shine('red');
 
 var mincycle = 500; var maxcycle = 2300 ;
 var dutycycle = mincycle;
 
 // Init board, setup software PWM on pin 26.
-var Gpio = require('pigpio').Gpio;
-var motor = new Gpio(7, {mode: Gpio.OUTPUT});
+//var Gpio = require('pigpio').Gpio;
+//var motor = new Gpio(7, {mode: Gpio.OUTPUT});
 
 var deviceClient = new iotf.IotfDevice(config);
 
@@ -93,25 +93,28 @@ myjson = JSON.parse(payload);
 
    if(commandName === "armFORWARD") {
       console.log("armForward = 2000");    
-      motor.servoWrite(2000); //open
+ //     motor.servoWrite(2000); //open
  
+tjservo.lowerArm();
     } else if(commandName === "armUP") {
       console.log("armUP = 1000 ");
-      motor.servoWrite(1000); //open
+//      motor.servoWrite(1000); //open
+	tjservo.raiseArm();
+
 
     } else if(commandName === "armBACK") {
    console.log("armBACK = 500") ;  
-    motor.servoWrite(500); //open
-
+   // motor.servoWrite(500); //open
+	 tjservo.armBack();
     } else if(commandName === "armMOVE") {
         console.log("armMove");
         console.log("armMove value = "+myjson.d.motorSpin);
-        motor.servoWrite(myjson.d.motorSpin); //open
+        //motor.servoWrite(myjson.d.motorSpin); //open
 
     } else if(commandName === "armWAVE") {
-
      console.log("armWave");
-
+tjservo.lWave();
+/*
      motor.servoWrite(1200);
      sleep(300)
      motor.servoWrite(2000);
@@ -121,6 +124,7 @@ myjson = JSON.parse(payload);
      motor.servoWrite(2000);
      sleep(400);
      motor.servoWrite(1200);
+*/
 
 }else if( commandName === "ledON") {
           setLED("on");
@@ -143,22 +147,22 @@ myjson = JSON.parse(payload);
 
 function setLED(value,mycolor,myvalue) {
     if (value == "on") {
-	tj.shine('white');
+	tjled.shine('white');
     //    color[0] = 0xffffff ;
     } else if (value == "blue"){
-	tj.shine('blue');
+	tjled.shine('blue');
        // color[0] = 0x0000ff ;
     } else if (value == "red"){
-	tj.shine('red');
+	tjled.shine('red');
         //color[0] = 0x00ff00 ;
     } else if (value == "green"){
-	tj.shine('green');
+	tjled.shine('green');
        // color[0] = 0xff0000 ;
     } else if (value == "led"){
-	tj.shine(myvalue);      
+	tjled.shine(myvalue);      
  // color[0] = mycolor ;
     }else {
-tj.shine('off');
+tjled.shine('off');
         //color[0] = 0x000000 ;
     }
    // ws281x.render(color);
