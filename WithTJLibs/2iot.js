@@ -52,6 +52,7 @@ console.log("TJBot WIOT controler program");
 
 console.log('Wave check and Led on');
 setLED("on");
+tjservo.wave();
 readout = dht.read();
 console.log('Temperature: ' + readout.temperature.toFixed(2) + 'C, ' +
         'humidity: ' + readout.humidity.toFixed(2) + '%');
@@ -113,7 +114,7 @@ tjservo.lowerArm();
 
     } else if(commandName === "armWAVE") {
      console.log("armWave");
-tjservo.lWave();
+tjservo.wave();
 /*
      motor.servoWrite(1200);
      sleep(300)
