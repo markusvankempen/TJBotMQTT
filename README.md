@@ -1,7 +1,7 @@
 ### TJBot and the Watson IoT Platform
 #### TJBot mqtt connection controller program and node-red flows
 ### Basic setup instructions video
-#### go through these steps 1stplease -  https://youtu.be/vLW-JrafW30
+#### go through these steps 1st please -  https://youtu.be/vLW-JrafW30
 
 ### No 1 - Connecting TJBoT Watson IoT Platform
 #### Short Video: https://youtu.be/4WnfalzKss4
