@@ -4,6 +4,7 @@
 #### install node-iot/ibmiotf in the TJBotMQTT directory via
 #### git clone https://github.com/ibm-watson-iot/iot-nodejs.git and
 #### npm install in iot-nodejs
-#### change to WitfTJLibs
+#### change to WithTJLibs
 #### adjust the device.json with your WIoT credentials
 #### sudo node 2iot.js
+#### import the flows into you Node-RED
