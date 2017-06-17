@@ -6,14 +6,13 @@ Sends mqtt message to IoT and Waits for commands to controls the
 TJ servo motor and led 
 
 version 20170613 
-Note: Stand alone MQTT control no need for  TJBot Lib for this one
+Note: Stand alone MQTT control no need for  TJBot Lib
 **********************************************************************/
-var iotf = require("./../iot-nodejs/.");
+var iotf = require("./");
 var config = require("./device.json");
-//var ws281x = require('rpi-ws281x-native');
+var ws281x = require('rpi-ws281x-native');
 var rpiDhtSensor = require('rpi-dht-sensor');
 var exec = require('child_process').exec;
-const TJBot = require('tjbot');
 
 /***********************************************************************
 * Setup
@@ -23,12 +22,9 @@ const TJBot = require('tjbot');
 var dht = new rpiDhtSensor.DHT22(4);
 var readout = dht.read();
 var NUM_LEDS = 1;        // Number of LEDs
-//ws281x.init(NUM_LEDS);   // initialize LEDs 
-//var color = new Uint32Array(NUM_LEDS); 
-//ws281x.render(color);
-var tj = new TJBot(['led'], {log: {level: 'debug'}}, {});
-
-//tj.shine('red');
+ws281x.init(NUM_LEDS);   // initialize LEDs 
+var color = new Uint32Array(NUM_LEDS); 
+ws281x.render(color);
 
 var mincycle = 500; var maxcycle = 2300 ;
 var dutycycle = mincycle;
@@ -64,7 +60,7 @@ deviceClient.on('connect', function(){
     console.log("connected");
     setInterval(function function_name () {
 	readout = dht.read();
-	mystr = ',"temperature":' +readout.temperature.toFixed(2)+', "humidity": ' + readout.humidity.toFixed(2);
+	mystr = ',"Temperature":' +readout.temperature.toFixed(2)+', "humidity": ' + readout.humidity.toFixed(2);
     	i++;
     	deviceClient.publish('myevt', 'json', '{"value":'+i+mystr+'}', 2);
     },5000);
@@ -133,35 +129,29 @@ myjson = JSON.parse(payload);
 }else if( commandName === "ledBLUE") {
           setLED("blue");
 }else if( commandName === "ledSET") {
-  console.log("Set LED to  (GGRRBB) = "+myjson.d.color +" value = "+myjson.d.value);
-          setLED("led",myjson.d.color,myjson.d.value);
+  console.log("Set LED to  (GGRRBB) = "+myjson.d.color);
+          setLED("led",myjson.d.color);
 }else {
           console.log("Command not supported.. " + commandName);
     }
 });
 
 
-function setLED(value,mycolor,myvalue) {
+function setLED(value,mycolor) {
     if (value == "on") {
-	tj.shine('white');
-    //    color[0] = 0xffffff ;
+        color[0] = 0xffffff ;
     } else if (value == "blue"){
-	tj.shine('blue');
-       // color[0] = 0x0000ff ;
+        color[0] = 0x0000ff ;
     } else if (value == "red"){
-	tj.shine('red');
-        //color[0] = 0x00ff00 ;
+        color[0] = 0x00ff00 ;
     } else if (value == "green"){
-	tj.shine('green');
-       // color[0] = 0xff0000 ;
+        color[0] = 0xff0000 ;
     } else if (value == "led"){
-	tj.shine(myvalue);      
- // color[0] = mycolor ;
+        color[0] = mycolor ;
     }else {
-tj.shine('off');
-        //color[0] = 0x000000 ;
+        color[0] = 0x000000 ;
     }
-   // ws281x.render(color);
+    ws281x.render(color);
 }
 
 
