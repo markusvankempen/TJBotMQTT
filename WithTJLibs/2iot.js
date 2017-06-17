@@ -8,7 +8,7 @@ TJ servo motor and led
 version 20170613 
 Note: needs TJBot Lib
 **********************************************************************/
-var iotf = require("./");
+var iotf = require("../iot-nodejs/.");
 var config = require("./device.json");
 //var ws281x = require('rpi-ws281x-native');
 var rpiDhtSensor = require('rpi-dht-sensor');
