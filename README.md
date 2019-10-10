@@ -9,10 +9,12 @@
 ##
 ### Clone repo
 #### npm install in WithTJLibs
-#### install node-iot/ibmiotf in the TJBotMQTT directory via
-#### git clone https://github.com/ibm-watson-iot/iot-nodejs.git 
+#### install node-iot/ibmiotf in the TJBotMQTT directory via 
+#### note node-iot/ibmiotf is the old version '0.1.1'
+#### git clone git clone -b '0.1.1' https://github.com/ibm-watson-iot/iot-nodejs.git
 #### and
 #### npm install in iot-nodejs
 #### change to WitfTJLibs
-#### adjust the device.json with your WIoT credentials
+#### npm install
+#### adjust the device.json with your WIoT credentials and setlogger function just comment it out 
 #### sudo node 2iot.js
